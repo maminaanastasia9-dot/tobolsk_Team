@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- #метаданные -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сборная Тобольска по танцам | Roblox</title>
+    
+    <!-- #стили -->
+    <style>
+        /* #переменные_тем — розово-чёрная (тёмная) и розово-белая (светлая) */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: rgba(0, 0, 0, 0.7);
+            --text-primary: #ffffff;
+            --accent-pink: #c2185b;
+            --accent-secondary: #8b0040;
+            --card-bg: rgba(139, 0, 64, 0.2);
+        }
+        
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: rgba(244, 194, 194, 0.3);
+            --text-primary: #000000;
+            --accent-pink: #ffb6c1;
+            --accent-secondary: #f4c2c2;
+            --card-bg: rgba(244, 194, 194, 0.3);
+        }
+        
+        /* #общие_настройки */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        /* #фон_страницы — чёрно-розовый градиент (тёмная) / бело-розовый (светлая) */
+        body {
+            background: linear-gradient(135deg, var(--bg-primary), var(--accent-secondary));
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s;
+        }
+        
+        /* #переключатель_темы */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .theme-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-pink);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .theme-btn:hover {
+            background: var(--accent-pink);
+            transform: scale(1.05);
+        }
+        
+        /* #дисклеймер */
+        .disclaimer {
+            background: var(--accent-pink);
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 3px solid var(--accent-secondary);
+            font-size: 0.95em;
+        }
+        
+        /* #шапка */
+        header {
+            background: var(--bg-secondary);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-pink);
+        }
+        
+        header h1 {
+            font-size: 3em;
+            color: var(--accent-pink);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        
+        /* #навигация */
+        nav {
+            background: var(--bg-secondary);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--accent-pink);
+        }
+        
+        /* #главное_окно — hero-секция */
+        .hero {
+            background: var(--bg-secondary);
+            padding: 60px 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-secondary);
+            margin-bottom: 30px;
+        }
+        
+        .hero h2 {
+            font-size: 2.5em;
+            color: var(--accent-pink);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.3em;
+            color: var(--text-primary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* #основной_контент */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* #секция */
+        section {
+            background: var(--card-bg);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        section h2 {
+            color: var(--accent-pink);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-pink);
+            padding-bottom: 8px;
+        }
+        
+        /* #список_состава — карточки */
+        .dancers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .dancer-card {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-pink);
+        }
+        
+        .dancer-card h3 {
+            color: var(--accent-pink);
+            margin-bottom: 8px;
+        }
+        
+        .dancer-card p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        /* #таблица_сравнения */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border: 2px solid var(--accent-pink);
+        }
+        
+        .comparison-table th {
+            background: var(--accent-pink);
+            color: #fff;
+            font-size: 1.2em;
+        }
+        
+        .comparison-table td {
+            background: var(--bg-secondary);
+        }
+        
+        .comparison-table tr:hover td {
+            background: rgba(194, 24, 91, 0.2);
+        }
+        
+        .comparison-table .our-team {
+            border: 3px solid var(--accent-pink);
+            background: rgba(194, 24, 91, 0.2);
+        }
+        
+        .comparison-table .our-team th {
+            background: var(--accent-pink);
+        }
+        
+        /* #галерея_фото — сетка 3x2 */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .photo-gallery img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid var(--accent-pink);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .photo-gallery img:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-secondary);
+            box-shadow: 0 5px 15px rgba(194, 24, 91, 0.5);
+        }
+        
+        /* #кнопки_соцсетей */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .social-btn.telegram {
+            background: linear-gradient(135deg, #0088cc, #00a0e3);
+            color: #fff;
+        }
+        
+        .social-btn.tiktok {
+            background: linear-gradient(135deg, #000000, #25f4ee);
+            color: #fff;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .social-btn.telegram:hover {
+            border-color: #fff;
+        }
+        
+        .social-btn.tiktok:hover {
+            border-color: #ff0050;
+        }
+        
+        /* #подвал */
+        footer {
+            background: var(--bg-secondary);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+            border-top: 3px solid var(--accent-pink);
+        }
+        
+        /* #адаптивность */
+        @media (max-width: 768px) {
+            .photo-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .photo-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- #переключатель_темы -->
+    <div class="theme-switcher">
+        <button class="theme-btn" onclick="toggleTheme()">🌓 Сменить тему</button>
+    </div>
+
+    <!-- #дисклеймер -->
+    <div class="disclaimer">
+        ⚠️ ВНИМАНИЕ: Это фан-сайт в Roblox! Не имеет отношения к официальным сайтам города Тобольск ⚠️
+    </div>
+
+    <!-- #шапка -->
+    <header>
+        <h1>Сборная Тобольска</h1>
+        <p>«Никак не связано с реальной жизнью — это полностью фан-проект в Roblox»</p>
+    </header>
+
+    <!-- #навигация -->
+    <nav>
+        <a href="#about">О команде</a>
+        <a href="#roster">Состав</a>
+        <a href="#comparison">Сравнение</a>
+        <a href="#gallery">Галерея</a>
+        <a href="#contacts">Контакты</a>
+    </nav>
+
+    <!-- #главное_окно -->
+    <div class="hero">
+        <h2>О нас</h2>
+        <p>Мы - сборная Тобольска. Мы занимаемся в плейсе ORA. Немного о проекте: проект был основан 27 июля 2025 года. На данный момент (20 сентября 2026 года) нам чуть больше года. 
+            У нас есть телеграмм канал а также тик ток акаунт, их вы можете найти ниже. Ник владельца в roblox: Nasty124op  в телеграмме: @Tavi_i . Для того чтобы вступить в наши ряды достаточно 
+        перейти в наш телеграмм канал, и найти пост о наборе в команду (его можно найти в навигации которая закрепленна в канале). Если вы присоеденитесь к нам, то вы будетие участвовать во внутренних
+    соревнованиях, сборах, отчётных концертах, сниматься в видео и многое другое. Мы очень ждём тебя, случайный прохожий с сайта, ведь именно с него может начаться твоя карьера танцора.  </p>
+    </div>
+
+    <!-- #основное_содержимое -->
+    <main>
+        
+        <!-- #секция_о_команде -->
+        <section id="about">
+            <h2>О команде</h2>
+            <p>Сборная Тобольска по танцам в Roblox — креативная команда виртуальных танцоров! 
+            Основана 27 июля 2025 года. Участвуем в танцевальных конкурсах и фестивалях внутри игры Roblox, а также проводим свои.</p>
+        </section>
+
+        <!-- #секция_состав -->
+        <section id="roster">
+            <h2>Состав Администрации</h2>
+            <div class="dancers-list">
+                
+                <div class="dancer-card">
+                    <h3>Владелец</h3>
+                    <p><strong>Имя:</strong> Шумилова Тавифа Андреевна</p>
+                    <p><strong>Роль:</strong> Владелец / главный тренер</p>
+                    <p><strong>Возраст:</strong> 26 лет</p>
+                </div>
+                
+                <div class="dancer-card">
+                    <h3>Совладелец</h3>
+                    <p><strong>Имя:</strong> Эвери</p>
+                    <p><strong>Роль:</strong> Оператор</p>
+                    <p><strong>Возраст:</strong> 22 года</p>
+                </div>
+                
+                <div class="dancer-card">
+                    <h3>Тренер</h3>
+                    <p><strong>Имя:</strong> Дарси</p>
+                    <p><strong>Роль:</strong> Хореограф</p>
+                    <p><strong>Возраст:</strong> 20 лет</p>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- #секция_сравнения -->
+        <section id="comparison">
+            <h2>Сравнение с другими сборными</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="our-team">Сборная Тобольска</th>
+                            <th>Сборная №1</th>
+                            <th>Сборная №2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="our-team"><strong>Основана:</strong><br>27 июля 2025</td>
+                            <td><strong>Основана:</strong><br> 1 сентября 2026 года </td>
+                            <td><strong>Основана:</strong><br> 30 августа 2026 года </td>
+                        </tr>
+                        <tr>
+                            <td class="our-team"><strong>Подписчиков:</strong><br>200</td>
+                            <td><strong>Подписчиков:</strong><br>25</td>
+                            <td><strong>Подписчиков:</strong><br>10</td>
+                        </tr>
+                        <tr>
+                            <td class="our-team"><strong>Telegram:</strong><br>118 подписчиков</td>
+                            <td><strong>Telegram:</strong><br>3</td>
+                            <td><strong>Telegram:</strong><br>5</td>
+                        </tr>
+                        <tr>
+                            <td class="our-team"><strong>Тренировки:</strong><br>Вторник, пятница, выходные</td>
+                            <td><strong>Тренировки:</strong><br> понедельник</td>
+                            <td><strong>Тренировки:</strong><br> нету </td>
+                        </tr>
+                        <tr>
+                            <td class="our-team"><strong>Плейс:</strong><br>ORA</td>
+                            <td><strong>Плейс:</strong><br>ORA театр</td>
+                            <td><strong>Плейс:</strong><br> PRA театр</td>
+                        </tr>
+                        <tr>
+                            <td class="our-team"><strong>Достижения:</strong><br>Участие в конкурсах </td>
+                            <td><strong>Достижения:</strong><br>нету</td>
+                            <td><strong>Достижения:</strong><br>нету</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- #секция_галерея -->
+        <section id="gallery">
+            <h2>Галерея</h2>
+            <div class="photo-gallery">
+                <img src="photo1.jpg" alt="Тренировка на балансирах">
+                <img src="photo2.jpg" alt="Растяжка">
+                <img src="photo3.jpg" alt="Команда">
+                <img src="photo4.jpg" alt="Тренировка в зале">
+                <img src="photo5.jpg" alt="В зале">
+                <img src="photo6.jpg" alt="У станка ORA">
+            </div>
+        </section>
+        
+        <!-- #секция_контакты -->
+        <section id="contacts">
+            <h2>Контакты</h2>
+            <p>👥 Подписчиков: 200</p>
+            <p>📱 Telegram: 118 подписчиков</p>
+            <p>🕐 Тренировки: вторник, пятница, выходные</p>
+            
+            <div class="social-buttons">
+                <a href="https://t.me/Tobosk_Team" target="_blank" class="social-btn telegram">
+                    📱 Telegram
+                </a>
+                <a href="https://tiktok.com/@sbornya_tobolska" target="_blank" class="social-btn tiktok">
+                     TikTok
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- #подвал -->
+    <footer>
+        <p>© 2026 Сборная Тобольска по танцам в Roblox. Фан-проект.</p>
+        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+            Это неофициальный сайт. Не связан с администрацией Тобольска или Roblox Corporation.
+        </p>
+    </footer>
+
+    <!-- #скрипт_переключения_темы -->
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'light') {
+                html.removeAttribute('data-theme');
+            } else {
+                html.setAttribute('data-theme', 'light');
+            }
+        }
+    </script>
+
+</body>
+</html>
